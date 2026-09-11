@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="k8AGLMOND9lQYgKSibTbJp">
+<head data-page-node-id="gCRFqhdarTvdN6at5dELN2">
+  <meta charset="UTF-8" data-page-node-id="SwvDxaJom1pgubHKZrDbJu">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" data-page-node-id="3yHzBP9aySJc03EET3GZ4e">
+  <meta name="description" content="MBTI 16 型人格测试：32 道题，四维倾向分析，测出你属于哪一型人格。" data-page-node-id="EHUVDCbFAIWNU1uLJcmTLv">
+  <title>MBTI 16 型人格测试 | 32 题四维倾向分析</title>
+  <link rel="stylesheet" href="css/style.css" data-page-node-id="NQXKf6F1mUeuzsRCjNJX0V">
+</head>
+<body data-page-node-id="Qs7EZXKjiTSRMOv2St4LDS">
+  <div class="stage" data-page-node-id="zT1sSq8u1d2S7rz6dyYLXT">
+
+    <!-- 封面 -->
+    <section id="screen-cover" class="screen active" data-page-node-id="v6sEyPFEcDMtqh5IzXSsV2">
+      <div class="cover-grid" aria-hidden="true" data-page-node-id="18fjyGUBmYZYQDGiJne3QF">
+        <span data-page-node-id="nacjP5HwhuZHQHcq57cxkN">INTJ</span><span data-page-node-id="KuQUqu4TA5xngYLLEgAB2z">ENFP</span><span data-page-node-id="vDS6sA0ZsgtNzymnGWqiHv">ISTJ</span><span data-page-node-id="ibax5k0dpPDBf5UfVSCKEW">ESFJ</span>
+        <span data-page-node-id="hO3sl6ci2h9DkHo9xX84d9">INFP</span><span data-page-node-id="EsCbGbkQFk2gADViNTIPxs">ENTP</span><span data-page-node-id="tXEP3RCqtt3tB4fQ20EPIM">ISFJ</span><span data-page-node-id="bz4Vs28qRmYa6KLCWpc4W3">ESTP</span>
+      </div>
+      <h1 class="cover-title" data-page-node-id="WUk7kNLJL8Kjn9AscVESvg">MBTI<br data-page-node-id="GqcNxuLyGVD5trBCuxjeQF">16 型人格测试</h1>
+      <p class="cover-sub" data-page-node-id="OL4uwoZywyyi8IIoMN7H32">32 道题 · 约 5 分钟<br data-page-node-id="T2jd3K13umSRLsSn9LqjEB">四维倾向分析 · 16 型人格解读</p>
+      <div class="cover-tags" data-page-node-id="xtTJfkvinYDCQvWFHlp8io">
+        <span data-page-node-id="eHUKVzVmb9c6he85m6ED9B">四维倾向</span><span data-page-node-id="bwC8MIFFDBX1Znp4EcDAnz">优势与盲点</span><span data-page-node-id="zCdP8HAJ7VwwgN1RaYitLx">关系匹配</span>
+      </div>
+      <button id="startBtn" class="btn-primary" disabled data-page-node-id="l6UA1tL631TzSOTBUdvc2E">加载中…</button>
+      <p class="disclaimer" data-page-node-id="2PmlFpRayafGVw6cqADOAd">非官方测试 · 结果仅供自我探索参考，不作为心理诊断依据</p>
+    </section>
+
+    <!-- 答题 -->
+    <section id="screen-quiz" class="screen" data-page-node-id="XQG2sU5w19U5jPxRArkLDn">
+      <div class="quiz-header" data-page-node-id="KBMEaZq2RoRdpChlQW48cN">
+        <div class="progress-track" data-page-node-id="j9hMwfhb7KxD9kzl6VWkjV"><div id="progressBar" class="progress-bar" data-page-node-id="1RTVWEZt0uf8yB3FzWo2g2"></div></div>
+        <span id="quizCount" class="quiz-count" data-page-node-id="RmRYCQTkS59h2wsbgOXdz6">1 / 32</span>
+      </div>
+      <div id="quizCard" class="quiz-card" data-page-node-id="RX9wFvfqbvgY6etnle5CXU">
+        <p id="quizDim" class="quiz-dim" data-page-node-id="xdEdCXHLfWgwFvcHXC0hTD"></p>
+        <p id="quizText" class="quiz-text" data-page-node-id="ClqXE9NJxPlnytwQHHW2S5"></p>
+        <div id="quizOptions" class="quiz-options" data-page-node-id="vUkY3mAECUyEfa49trC4JG"></div>
+      </div>
+      <button id="backBtn" class="btn-ghost" type="button" data-page-node-id="zfeJkt82oGEW8tPGVeLqxL">← 上一题</button>
+    </section>
+
+    <!-- 分析中 -->
+    <section id="screen-loading" class="screen" data-page-node-id="LpptEi0uK7sbpj8ycyxsfi">
+      <div class="loading-orb" aria-hidden="true" data-page-node-id="TCHJqlnMAWFC1WsX8LDt1B"></div>
+      <p id="loadingText" class="loading-text" data-page-node-id="pl23A7hZjXkAtf3danJZpr">正在计算四维倾向…</p>
+    </section>
+
+    <!-- 结果 -->
+    <section id="screen-result" class="screen" data-page-node-id="ZG4oJJOEuWbyz4g4b4CQxM">
+      <div id="resultCard" class="result-card" data-page-node-id="ZJDezxRlLAjEGTYP0qbd9C">
+        <div class="result-head" id="resultHead" data-page-node-id="QTspm0Yy6plWP7rMiG1JA4">
+          <p class="result-label" data-page-node-id="BQxoJIMVJRv4N8EEtpRhPf">你的 MBTI 类型是</p>
+          <div id="resultCode" class="result-code" data-page-node-id="5FBZXdehFKETbqHiFmKqqx"></div>
+          <h2 id="resultName" class="result-name" data-page-node-id="wiSoFi7JxPV57IXmkC6gGd"></h2>
+          <p id="resultEn" class="result-en" data-page-node-id="jjGPVO38TLNnt8ufcFsNfN"></p>
+          <div class="result-tags" id="resultTags" data-page-node-id="oJz4EFINIPLlPhiIAFnVMa"></div>
+        </div>
+
+        <div class="result-body" data-page-node-id="BYloaHRPkWrsa2A4KEF8Nv">
+          <p id="resultTagline" class="result-tagline" data-page-node-id="WJREfLQCbZhhglNDvCEL8C"></p>
+          <p id="resultSummary" class="result-summary" data-page-node-id="fAYb97laZrtRGHdERoloRj"></p>
+
+          <!-- 四维倾向 -->
+          <section class="block" data-page-node-id="HuTFk3qNRSQ35Gn71p1clZ">
+            <h3 class="block-title" data-page-node-id="WMj8BtddaevUSOK0rt7i24">四维倾向分析 📊</h3>
+            <div id="dimBars" class="dim-bars" data-page-node-id="3HKiApuyGuVGbUOPgHMBr4"></div>
+            <p id="dimNote" class="dim-note" data-page-node-id="tEeSTen5730N8KCFsQdKRM"></p>
+          </section>
+
+          <!-- 维度解读 -->
+          <section class="block" data-page-node-id="bGBl5GGXcijQ4Zf2krF1Yk">
+            <h3 class="block-title" data-page-node-id="oiSc6z9c8RpdqsPjHnBxJQ">你的四个维度是什么意思 🧩</h3>
+            <div id="dimExplain" class="dim-explain" data-page-node-id="X6kSeXqyQdPZFkGkrsQhRd"></div>
+          </section>
+
+          <!-- 优势 -->
+          <section class="block" data-page-node-id="oKYoHXCntH8QhPVQcKC88Y">
+            <h3 class="block-title" data-page-node-id="WEDUV28WdKlQ7yEpjShB8X">核心优势 ✨</h3>
+            <ul id="resultStrengths" class="tick-list" data-page-node-id="QeqsrIJSKBvwXwXXvFj9Wd"></ul>
+          </section>
+
+          <!-- 盲点 -->
+          <section class="block" data-page-node-id="GXNmRG4slLHuzA3hICHTsw">
+            <h3 class="block-title" data-page-node-id="coNISEes6NmVGvyqZ2cOQq">潜在盲点 💡</h3>
+            <ul id="resultBlindspots" class="tick-list warn" data-page-node-id="Cue14Yh2uAD5LEU9ft5MSD"></ul>
+          </section>
+
+          <!-- 职业 -->
+          <section class="block" data-page-node-id="AHCvABdLW07vd2AfFdsw70">
+            <h3 class="block-title" data-page-node-id="5qWHkYbGjH04VK5hMKszeo">常见适配方向 🧭</h3>
+            <div id="resultCareers" class="chip-row" data-page-node-id="Vq144JSc5lFQ2teqgUjBdF"></div>
+            <p class="block-hint" data-page-node-id="bDIGAmsgAZtIrKvFGBLSBR">仅为倾向性参考，不代表能力上限或职业限制。</p>
+          </section>
+
+          <!-- 关系 -->
+          <section class="block" data-page-node-id="BHWBIsYDEo0vidVT4Pk3Sz">
+            <h3 class="block-title" data-page-node-id="wfpdxzt0WZICun7DPzwyld">关系参考 🤝</h3>
+            <div class="match-row" data-page-node-id="HI6hSLE6vi42WlLSuT08R7">
+              <div class="match-item" data-page-node-id="xr0DwBZilll12aC4oU34ep">
+                <p class="match-label" data-page-node-id="9TCwnABMjkCC8FRp3awRm9">高默契组合</p>
+                <p class="match-value" id="matchBest" data-page-node-id="YbfMs85Z4UvGEZ7CyFsNdz"></p>
+              </div>
+              <div class="match-item" data-page-node-id="mbisBclxcV3EYjxdGcEwYh">
+                <p class="match-label" data-page-node-id="djdIZ2fFrYbQe5EDi2Z1Pj">成长型组合</p>
+                <p class="match-value alt" id="matchGrowth" data-page-node-id="vQCYRut5AUdSL2Tbvalhju"></p>
+              </div>
+            </div>
+            <p class="block-hint" data-page-node-id="4kqVgatmBZ5hWipC08HTwz">互补与相似各有价值，此栏仅从人格偏好差异角度参考。</p>
+          </section>
+
+          <!-- 一致性 -->
+          <section class="block" data-page-node-id="XQv5tKEnKn6p5v2dtFK78q">
+            <h3 class="block-title" data-page-node-id="P4zW0XTmBQd8JIkqKcDjDx">结果一致性 🔍</h3>
+            <div class="conf-row" data-page-node-id="uXczxLAO4NZlHCC9Cc76tF">
+              <span id="confLabel" class="conf-label" data-page-node-id="jrPJy3pwiDshaCD30EyVaD"></span>
+              <div class="conf-track" data-page-node-id="xT4mbGIJ8Y0D4KCU9gyPgO"><div id="confFill" class="conf-fill" data-page-node-id="WUcolfCPVrSKFmNbF5BD3R"></div></div>
+            </div>
+            <p id="confNote" class="block-hint" data-page-node-id="wVRzrWlsI0IVB9Cda9zs62"></p>
+          </section>
+
+          <p class="result-footer" data-page-node-id="WRKFw1Gk92CvO1ZmkC5JeO">MBTI® 为 The Myers-Briggs Foundation 商标 · 本页面为非官方免费工具 · 结果仅供娱乐与自我探索</p>
+        </div>
+      </div>
+
+      <div class="result-actions" data-page-node-id="6f9mIDyMF2DsnkVHttVrD0">
+        <button id="copyBtn" class="btn-secondary" type="button" data-page-node-id="0Ht69kEktHAjvmgMgOVuDq">复制我的结果 📋</button>
+        <button id="retryBtn" class="btn-primary" type="button" data-page-node-id="G2rSBC95irUiHY3u9J29EK">重新测试 🔁</button>
+      </div>
+      <p id="copyTip" class="copy-tip" data-page-node-id="G0ZVl3jywj3ZSy3RA2E3qU">已复制，去分享给朋友吧！</p>
+    </section>
+
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>

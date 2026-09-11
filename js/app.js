@@ -1,0 +1,270 @@
+/* MBTI 16 型人格测试 · 纯前端，全部数据来自 /data/*.json */
+(function () {
+  "use strict";
+
+  // 发布到 GitHub Pages 后，把这里换成你的站点地址，分享文案会自动带上
+  var SITE_URL = "";
+
+  var PAIRS = [
+    { key: "EI", left: "E", right: "I", leftName: "外向", rightName: "内向" },
+    { key: "SN", left: "S", right: "N", leftName: "实感", rightName: "直觉" },
+    { key: "TF", left: "T", right: "F", leftName: "思考", rightName: "情感" },
+    { key: "JP", left: "J", right: "P", leftName: "判断", rightName: "感知" }
+  ];
+  // 8 题一维度出现 4-4 平局时的兜底字母
+  var TIE_BREAK = { EI: "I", SN: "N", TF: "F", JP: "P" };
+
+  var state = { questions: [], results: [], meta: {}, poles: {}, answers: [], index: 0 };
+
+  function $(id) { return document.getElementById(id); }
+
+  var screens = {
+    cover: $("screen-cover"), quiz: $("screen-quiz"),
+    loading: $("screen-loading"), result: $("screen-result")
+  };
+
+  function show(name) {
+    Object.keys(screens).forEach(function (k) { screens[k].classList.toggle("active", k === name); });
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- 数据 ----------
+  function fetchJSON(path) {
+    return fetch(path).then(function (r) {
+      if (!r.ok) throw new Error(path + " " + r.status);
+      return r.json();
+    });
+  }
+
+  function loadData() {
+    Promise.all([
+      fetchJSON("data/questions.json"),
+      fetchJSON("data/results.json"),
+      fetchJSON("data/dimensions.json")
+    ]).then(function (res) {
+      state.meta = res[0];
+      state.questions = res[0].questions;
+      state.results = res[1].results;
+      res[2].poles.forEach(function (p) { state.poles[p.letter] = p; });
+      $("startBtn").disabled = false;
+      $("startBtn").textContent = "开始测试";
+    }).catch(function () {
+      $("startBtn").textContent = "数据加载失败，请用 HTTP 方式打开 😢";
+    });
+  }
+
+  // ---------- 答题 ----------
+  function startQuiz() {
+    state.answers = [];
+    state.index = 0;
+    renderQuestion();
+    show("quiz");
+  }
+
+  function renderQuestion() {
+    var q = state.questions[state.index];
+    var total = state.questions.length;
+
+    $("quizCount").textContent = (state.index + 1) + " / " + total;
+    $("progressBar").style.width = (state.index / total) * 100 + "%";
+    $("quizDim").textContent = "第 " + q.id + " 题";
+    $("quizText").textContent = q.text;
+    $("backBtn").style.visibility = state.index === 0 ? "hidden" : "visible";
+
+    var box = $("quizOptions");
+    box.innerHTML = "";
+    q.options.forEach(function (opt, i) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "option";
+      btn.textContent = opt.text;
+      if (state.answers[state.index] === i) btn.classList.add("picked");
+      btn.addEventListener("click", function () {
+        state.answers[state.index] = i;
+        box.querySelectorAll(".option").forEach(function (b) { b.disabled = true; });
+        btn.classList.add("picked");
+        setTimeout(next, 240);
+      });
+      box.appendChild(btn);
+    });
+  }
+
+  function next() {
+    if (state.index < state.questions.length - 1) {
+      state.index += 1;
+      renderQuestion();
+    } else {
+      $("progressBar").style.width = "100%";
+      analyze();
+    }
+  }
+
+  // ---------- 计分 ----------
+  function tally() {
+    var counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+    state.questions.forEach(function (q, i) {
+      var ai = state.answers[i];
+      if (ai === undefined) return;
+      counts[q.options[ai].score] += 1;
+    });
+    return counts;
+  }
+
+  function summarize(counts) {
+    var dims = PAIRS.map(function (p) {
+      var l = counts[p.left], r = counts[p.right], sum = l + r;
+      var lPct = sum ? Math.round((l / sum) * 100) : 50;
+      var rPct = 100 - lPct;
+      var winner = l === r ? null : (l > r ? p.left : p.right);
+      var chosen = winner || TIE_BREAK[p.key];
+      var margin = Math.abs(lPct - 50);           // 0 ~ 50
+      var strength = margin === 0 ? "无明显倾向" : (margin >= 37 ? "非常明显" : margin >= 25 ? "比较明显" : "轻微倾向");
+      return {
+        key: p.key, left: p.left, right: p.right,
+        leftName: p.leftName, rightName: p.rightName,
+        leftPct: lPct, rightPct: rPct, winner: winner, chosen: chosen,
+        margin: margin, strength: strength
+      };
+    });
+    var code = dims.map(function (d) { return d.chosen; }).join("");
+    var avg = dims.reduce(function (a, d) { return a + d.margin; }, 0) / dims.length;
+    return { dims: dims, code: code, avgMargin: avg };
+  }
+
+  // ---------- 分析动画 ----------
+  var MSGS = ["正在计算四维倾向…", "正在比对 16 型人格特征…", "正在生成你的优势与盲点…"];
+
+  function analyze() {
+    show("loading");
+    var i = 0;
+    $("loadingText").textContent = MSGS[0];
+    var timer = setInterval(function () {
+      i += 1;
+      if (i < MSGS.length) { $("loadingText").textContent = MSGS[i]; return; }
+      clearInterval(timer);
+      renderResult();
+      show("result");
+    }, 620);
+  }
+
+  // ---------- 结果渲染 ----------
+  function renderResult() {
+    var counts = tally();
+    var s = summarize(counts);
+    var r = state.results.find(function (x) { return x.code === s.code; })
+         || state.results.find(function (x) { return x.code === "INTJ"; });
+    var group = state.meta.groups[r.group] || { label: "", color: "#6c4dff" };
+
+    // 头部
+    $("resultHead").style.setProperty("--head-bg",
+      "linear-gradient(160deg, " + r.gradient[0] + ", " + r.gradient[1] + ")");
+    $("resultCode").textContent = r.code;
+    $("resultName").textContent = r.emoji + " " + r.name + " · " + group.label;
+    $("resultEn").textContent = r.enName;
+    $("resultTags").innerHTML = r.tags.map(function (t) { return "<span>" + t + "</span>"; }).join("");
+    $("resultTagline").textContent = "「" + r.tagline + "」";
+    $("resultSummary").textContent = r.summary;
+
+    // 四维倾向条
+    var bars = $("dimBars");
+    bars.innerHTML = "";
+    s.dims.forEach(function (d) {
+      var leftDom = d.winner === d.left ? " dominant" : "";
+      var rightDom = d.winner === d.right ? " dominant" : "";
+      var row = document.createElement("div");
+      row.className = "dim";
+      row.innerHTML =
+        '<div class="dim-head">' +
+          '<span class="dim-side' + leftDom + '">' + d.leftName + " " + d.left + " <b>" + d.leftPct + '%</b></span>' +
+          '<span class="dim-side' + rightDom + '">' + d.rightName + " " + d.right + " <b>" + d.rightPct + '%</b></span>' +
+        '</div>' +
+        '<div class="dim-track"><div class="dim-fill" style="width:0"></div></div>';
+      bars.appendChild(row);
+      var fill = row.querySelector(".dim-fill");
+      setTimeout(function () { fill.style.width = d.leftPct + "%"; }, 60);
+    });
+
+    var weak = s.dims.filter(function (d) { return d.margin <= 12.5; });
+    var note = weak.length
+      ? "其中 " + weak.map(function (d) { return d.leftName + "/" + d.rightName; }).join("、") +
+        " 两个倾向非常接近，说明你在这一维度上更灵活，会根据场景切换，不必强行归到某一极。"
+      : "四个维度的倾向都比较清楚，说明你的人格偏好相对稳定。";
+    $("dimNote").textContent = "填写说明：百分比为你在该维度两极上的答案分布。" + note;
+
+    // 维度解读
+    var ex = $("dimExplain");
+    ex.innerHTML = "";
+    s.dims.forEach(function (d) {
+      var p = state.poles[d.chosen];
+      if (!p) return;
+      var box = document.createElement("div");
+      box.className = "pole";
+      box.innerHTML =
+        '<div class="pole-top">' +
+          '<span class="pole-letter">' + p.letter + '</span>' +
+          '<span class="pole-name">' + p.name + '</span>' +
+          '<span class="pole-keywords">' + p.keywords.join(" · ") + '</span>' +
+        '</div>' +
+        '<p class="pole-desc">' + p.desc + '</p>';
+      ex.appendChild(box);
+    });
+
+    // 优势 / 盲点 / 职业
+    $("resultStrengths").innerHTML = r.strengths.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+    $("resultBlindspots").innerHTML = r.blindspots.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+    $("resultCareers").innerHTML = r.careers.map(function (t) { return "<span>" + t + "</span>"; }).join("");
+
+    // 关系匹配
+    function label(code) {
+      var x = state.results.find(function (t) { return t.code === code; });
+      return x ? x.emoji + " " + x.code + "｜" + x.name : code;
+    }
+    $("matchBest").textContent = label(r.bestMatch);
+    $("matchGrowth").textContent = label(r.growthMatch);
+
+    // 一致性
+    var confPct = Math.round((s.avgMargin / 50) * 100);
+    var level = s.avgMargin >= 35 ? "很高" : s.avgMargin >= 20 ? "中等" : "偏低";
+    $("confLabel").textContent = "一致性：" + level;
+    setTimeout(function () { $("confFill").style.width = confPct + "%"; }, 80);
+    $("confNote").textContent = "计算公式：四个维度答案偏向的平均幅度（" + Math.round(s.avgMargin * 2) +
+      "% 满幅）。数值越高说明作答越明确；偏低通常意味着你正处于变化期，或本就更擅长在不同场合切换。若想更准确，建议隔一段时间重测一次对照。";
+
+    // 分享文案
+    var tpl = state.meta.shareTemplate || "我的 MBTI 是 {code}｜{name}";
+    window.__shareText = tpl
+      .replace("{code}", r.code).replace("{name}", r.name)
+      .replace("{tagline}", r.tagline)
+      + (SITE_URL ? "\n" + SITE_URL : "");
+  }
+
+  // ---------- 事件 ----------
+  $("startBtn").addEventListener("click", startQuiz);
+  $("retryBtn").addEventListener("click", startQuiz);
+  $("backBtn").addEventListener("click", function () {
+    if (state.index > 0) { state.index -= 1; renderQuestion(); }
+  });
+
+  $("copyBtn").addEventListener("click", function () {
+    var text = window.__shareText || "来测测你的 MBTI 是哪一型";
+    function done() {
+      var tip = $("copyTip");
+      tip.classList.add("show");
+      setTimeout(function () { tip.classList.remove("show"); }, 2000);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) { /* noop */ }
+      document.body.removeChild(ta);
+      done();
+    }
+  });
+
+  loadData();
+})();

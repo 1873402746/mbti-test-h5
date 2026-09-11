@@ -1,0 +1,13 @@
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.log
+
+# 依赖（本项目零依赖，仅作兜底）
+node_modules/
+
+# WorkBuddy 工作目录
+.workbuddy/
