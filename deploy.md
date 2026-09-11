@@ -5,6 +5,53 @@
 
 ---
 
+## 零、推送前必读：本机的网络与凭据（已配置好）
+
+2026-09-11 实测确认了两件事，**推不上去基本都栽在这两点上**：
+
+| 事实 | 说明 |
+|---|---|
+| 本机**直连** `github.com:443` 超时 | 必须走本地代理 `http://127.0.0.1:7890`（Clash 系代理工具，需保持运行） |
+| 系统级凭据助手是 TortoiseGit 的 `helper-selector` | 它在命令行/脚本场景会弹选择框，导致**无限卡住**（不报错、不退出） |
+
+另外，Windows 凭据管理器里**已经存有** `git:https://github.com` 凭据（由 TortoiseGit 保存），用 git 自带的 `wincred` 助手可以直接读取，无需重新登录。
+
+### 本仓库已固化以下配置（仓库级，不影响其他项目）
+
+```
+http.proxy        = http://127.0.0.1:7890
+https.proxy       = http://127.0.0.1:7890
+credential.helper = wincred
+```
+
+配好之后，在这个仓库里 `git push` / `git pull` 以及小乌龟推送都会**自动走代理 + 复用已存凭据**。
+
+查看当前配置：
+```bash
+cd "D:/workBuddyWorking/2026-09-11-08-49-19/mbti-test-h5"
+git config --local --list | grep -E "proxy|credential"
+```
+
+### 手动推送（一行，无弹窗）
+
+```bash
+cd "D:/workBuddyWorking/2026-09-11-08-49-19/mbti-test-h5"
+git push origin main
+```
+
+### 如果换了机器、或配置被清掉，用临时参数写法
+
+```bash
+git -c http.proxy=http://127.0.0.1:7890 -c https.proxy=http://127.0.0.1:7890 \
+    -c credential.helper= -c credential.helper=wincred push origin main
+```
+
+> **代理端口变了怎么办**：换代理工具或改设置后端口可能不是 7890。
+> 查正在监听的端口：`netstat -ano | findstr LISTENING | findstr 127.0.0.1`
+> 确认后同步：`git config --local http.proxy http://127.0.0.1:<新端口>`（`https.proxy` 同样改一遍）
+
+---
+
 ## 一、用 TortoiseGit（小乌龟）推送
 
 ### 0. 两个一次性设置（建议先做）
@@ -89,7 +136,9 @@ https://1873402746.github.io/mbti-test-h5/
 | `Authentication failed` | 用了账号密码，或登错账号 | 改用 PAT；注意本机还配过自建仓库凭据，别串号 |
 | `Updates were rejected` / `non-fast-forward` | 远端有你本地没有的提交 | 先「Git 同步 → 拉取(Pull)」，再推送 |
 | `remote origin already exists` | 已配过远端 | 无需重复添加；要改地址用 `git remote set-url origin <新地址>` |
-| 推送超时 / 卡住 | 网络问题 | Settings → 网络 → 代理服务器；或改用 SSH 方式 |
+| 推送超时 `Failed to connect to github.com port 443 ... Timed out` | 本机**直连** GitHub 不通 | 必须走本地代理：`git config --local http.proxy http://127.0.0.1:7890`，`https.proxy` 同样设一遍 |
+| 推送**没有任何输出、一直不动**（不报错也不退出） | 系统级凭据助手 `helper-selector` 在等交互弹窗 | 换 wincred：先 `git config --local --replace-all credential.helper ""`，再 `git config --local --add credential.helper wincred` |
+| TortoiseGit 里拉取/推送报 443 超时 | 小乌龟没走代理 | 同上配好仓库级代理后重试（小乌龟会读仓库 git 配置） |
 | 右键菜单没有 TortoiseGit 项 | 资源管理器未加载 | 重启资源管理器；确认真在仓库根目录（含 `.git`） |
 
 ---
