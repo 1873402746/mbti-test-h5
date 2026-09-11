@@ -1,106 +1,332 @@
 {
   "title": "MBTI 16 型人格测试",
   "subtitle": "32 道题 · 约 5 分钟 · 四维倾向分析",
-  "version": "1.0",
+  "version": "2.0",
+  "perDimension": 8,
+  "note": "题库共 64 题，四个维度各 16 题。每次测试随机抽取四维各 8 题（共 32 题），并打乱题目顺序与选项顺序。每题 4 个选项按「明显偏左 / 略偏左 / 略偏右 / 明显偏右」排列，weight 为计分权重（2=强烈，1=轻微）。",
   "questions": [
     { "id": 1, "dim": "EI", "text": "连续社交两天之后，你的状态是——", "options": [
-      { "text": "还想约下一场，越聊越精神", "score": "E" },
-      { "text": "急需独处一天回血，谁也别找我", "score": "I" } ] },
+      { "text": "还想约下一场，越聊越精神", "score": "E", "weight": 2 },
+      { "text": "有点累，但心里是充实的", "score": "E", "weight": 1 },
+      { "text": "需要一个人安静缓一缓", "score": "I", "weight": 1 },
+      { "text": "精疲力尽，谁也别来找我", "score": "I", "weight": 2 } ] },
     { "id": 2, "dim": "EI", "text": "开会讨论时，你更常——", "options": [
-      { "text": "边说边想，先讲出来再慢慢完善", "score": "E" },
-      { "text": "先在心里想清楚，想好了才开口", "score": "I" } ] },
+      { "text": "第一个开口，边说边把想法理清", "score": "E", "weight": 2 },
+      { "text": "想到什么就说什么，边聊边补", "score": "E", "weight": 1 },
+      { "text": "先在心里过一遍，差不多了再说", "score": "I", "weight": 1 },
+      { "text": "全程听着，只在关键处插一句", "score": "I", "weight": 2 } ] },
     { "id": 3, "dim": "EI", "text": "认识新朋友时，你通常——", "options": [
-      { "text": "主动上前打招呼，几句话就熟络了", "score": "E" },
-      { "text": "等对方先开口，慢热但交情长久", "score": "I" } ] },
+      { "text": "主动上前搭话，几句话就熟络起来", "score": "E", "weight": 2 },
+      { "text": "别人先开口，我也会接得很自然", "score": "E", "weight": 1 },
+      { "text": "对方先开口，我才慢慢打开", "score": "I", "weight": 1 },
+      { "text": "点头微笑就好，熟悉需要时间", "score": "I", "weight": 2 } ] },
     { "id": 4, "dim": "EI", "text": "更让你充电的场景是——", "options": [
-      { "text": "热闹的人群和聚会，人越多越有劲", "score": "E" },
-      { "text": "安静的角落，一个人待着最放松", "score": "I" } ] },
+      { "text": "热闹的人群，人越多我越有劲", "score": "E", "weight": 2 },
+      { "text": "三两好友小聚，轻松又不冷场", "score": "E", "weight": 1 },
+      { "text": "一个人在熟悉的地方待着", "score": "I", "weight": 1 },
+      { "text": "彻底独处，把所有消息都关掉", "score": "I", "weight": 2 } ] },
     { "id": 5, "dim": "EI", "text": "遇到烦心事，你更想——", "options": [
-      { "text": "找人聊一聊，说出来就轻松了一半", "score": "E" },
-      { "text": "自己消化，想明白了再决定要不要说", "score": "I" } ] },
+      { "text": "立刻找人说出来，说完轻松一半", "score": "E", "weight": 2 },
+      { "text": "找个人陪一会儿，不一定聊这件事", "score": "E", "weight": 1 },
+      { "text": "自己先消化，想明白了再说", "score": "I", "weight": 1 },
+      { "text": "谁都别说，我需要自己待着", "score": "I", "weight": 2 } ] },
     { "id": 6, "dim": "EI", "text": "关于打电话和发消息，你——", "options": [
-      { "text": "能打就打，说一句比打五行字快", "score": "E" },
-      { "text": "能打字就打字，不太喜欢打电话", "score": "I" } ] },
+      { "text": "能打就打，一句话顶五行字", "score": "E", "weight": 2 },
+      { "text": "急事打电话，其他时候随意", "score": "E", "weight": 1 },
+      { "text": "能打字就打，打电话要酝酿一下", "score": "I", "weight": 1 },
+      { "text": "电话响了先看是谁，能文字绝不语音", "score": "I", "weight": 2 } ] },
     { "id": 7, "dim": "EI", "text": "团队协作时，你更舒服的方式是——", "options": [
-      { "text": "边讨论边推进，观点在碰撞中变好", "score": "E" },
-      { "text": "先独立完成自己那块，再统一汇总", "score": "I" } ] },
+      { "text": "边讨论边推进，越聊越有灵感", "score": "E", "weight": 2 },
+      { "text": "先碰个头对齐，再各自开工", "score": "E", "weight": 1 },
+      { "text": "先自己做完那块，再统一汇总", "score": "I", "weight": 1 },
+      { "text": "最好给我一块独立的，别打断我", "score": "I", "weight": 2 } ] },
     { "id": 8, "dim": "EI", "text": "旅行时，你更享受——", "options": [
-      { "text": "结伴同行，热闹有人一起分享", "score": "E" },
-      { "text": "独自或小圈子，自由不被打扰", "score": "I" } ] },
+      { "text": "结伴同行，热闹有人一起分享", "score": "E", "weight": 2 },
+      { "text": "小团体出行，既能玩又不太累", "score": "E", "weight": 1 },
+      { "text": "找个人少的地方，慢慢晃", "score": "I", "weight": 1 },
+      { "text": "一个人走，行程完全自己说了算", "score": "I", "weight": 2 } ] },
+    { "id": 9, "dim": "EI", "text": "周末收到临时聚会邀请，你会——", "options": [
+      { "text": "太好了，正好没事，马上到", "score": "E", "weight": 2 },
+      { "text": "看是谁组织的，熟人多就去", "score": "E", "weight": 1 },
+      { "text": "先想想，昨天已经出去过了", "score": "I", "weight": 1 },
+      { "text": "婉拒，周末早就安排给我自己了", "score": "I", "weight": 2 } ] },
+    { "id": 10, "dim": "EI", "text": "在一个全是陌生人的场合里，你——", "options": [
+      { "text": "很快就能和旁边的人聊起来", "score": "E", "weight": 2 },
+      { "text": "有熟人带着，我就能放开", "score": "E", "weight": 1 },
+      { "text": "先观察一圈，找到合适的人才开口", "score": "I", "weight": 1 },
+      { "text": "安静待到结束，等别人来找我", "score": "I", "weight": 2 } ] },
+    { "id": 11, "dim": "EI", "text": "你的观点被当面质疑时，你——", "options": [
+      { "text": "当场就辩，边说边找依据", "score": "E", "weight": 2 },
+      { "text": "先回应一下，回去再补论据", "score": "E", "weight": 1 },
+      { "text": "当场不争，回去想清楚了再谈", "score": "I", "weight": 1 },
+      { "text": "懒得解释，心里有数就行", "score": "I", "weight": 2 } ] },
+    { "id": 12, "dim": "EI", "text": "一天结束，你更愿意用哪种方式放松——", "options": [
+      { "text": "约人吃个饭，聊聊今天的事", "score": "E", "weight": 2 },
+      { "text": "刷会儿手机，跟朋友线上扯两句", "score": "E", "weight": 1 },
+      { "text": "看剧看书，一个人待着", "score": "I", "weight": 1 },
+      { "text": "关灯躺着，什么都不想做也不想说话", "score": "I", "weight": 2 } ] },
+    { "id": 13, "dim": "EI", "text": "分组做项目时，你更想承担——", "options": [
+      { "text": "对外沟通、组织协调那一块", "score": "E", "weight": 2 },
+      { "text": "需要和人打交道的部分", "score": "E", "weight": 1 },
+      { "text": "需要专注钻研的部分", "score": "I", "weight": 1 },
+      { "text": "最好让我单独负责一块内容", "score": "I", "weight": 2 } ] },
+    { "id": 14, "dim": "EI", "text": "电梯里遇到不太熟的同事，你——", "options": [
+      { "text": "主动打个招呼，顺便聊两句", "score": "E", "weight": 2 },
+      { "text": "对方开口，我就自然接话", "score": "E", "weight": 1 },
+      { "text": "点个头，然后看手机", "score": "I", "weight": 1 },
+      { "text": "假装认真在看楼层号", "score": "I", "weight": 2 } ] },
+    { "id": 15, "dim": "EI", "text": "关于「和人待在一起」，你更认同——", "options": [
+      { "text": "人就像充电宝，越聊越有电", "score": "E", "weight": 2 },
+      { "text": "好朋友是刚需，但也要挑人", "score": "E", "weight": 1 },
+      { "text": "独处是必需品，社交是选修课", "score": "I", "weight": 1 },
+      { "text": "人多的地方，我电量掉得特别快", "score": "I", "weight": 2 } ] },
+    { "id": 16, "dim": "EI", "text": "如果一整天没和任何人说话，你——", "options": [
+      { "text": "受不了，必须找人聊两句", "score": "E", "weight": 2 },
+      { "text": "有点闷，会主动发个消息出去", "score": "E", "weight": 1 },
+      { "text": "挺舒服的，正好想想自己的事", "score": "I", "weight": 1 },
+      { "text": "完美的一天，希望明天也这样", "score": "I", "weight": 2 } ] },
 
-    { "id": 9, "dim": "SN", "text": "读一本书时，你更关注——", "options": [
-      { "text": "具体的情节、细节和实用信息", "score": "S" },
-      { "text": "背后的隐喻、象征和可能性", "score": "N" } ] },
-    { "id": 10, "dim": "SN", "text": "讲一件事的时候，你习惯——", "options": [
-      { "text": "按顺序把发生了什么讲清楚", "score": "S" },
-      { "text": "先讲它让我联想到什么", "score": "N" } ] },
-    { "id": 11, "dim": "SN", "text": "面对一个全新任务，你更信赖——", "options": [
-      { "text": "被验证过的经验和现成的方法", "score": "S" },
-      { "text": "自己的直觉和对趋势的预判", "score": "N" } ] },
-    { "id": 12, "dim": "SN", "text": "你更喜欢的学新东西的方式是——", "options": [
-      { "text": "步骤清晰的教程和大量实例", "score": "S" },
-      { "text": "先搞懂底层原理，再自己推演开去", "score": "N" } ] },
-    { "id": 13, "dim": "SN", "text": "别人夸你时，你更常听到——", "options": [
-      { "text": "「你做事很扎实、很靠谱」", "score": "S" },
-      { "text": "「你想法很有意思、挺有创意」", "score": "N" } ] },
-    { "id": 14, "dim": "SN", "text": "看完一部电影，你更在意——", "options": [
-      { "text": "剧情逻辑是否立得住、有没有 bug", "score": "S" },
-      { "text": "导演到底想借它表达什么", "score": "N" } ] },
-    { "id": 15, "dim": "SN", "text": "你的注意力更容易落在——", "options": [
-      { "text": "眼前正在发生的、可确认的事", "score": "S" },
-      { "text": "未来可能会发生什么", "score": "N" } ] },
-    { "id": 16, "dim": "SN", "text": "对「如果……会怎样」这类假设问题——", "options": [
-      { "text": "意义不大，不如先解决现实问题", "score": "S" },
-      { "text": "特别有兴趣，能顺着想很久", "score": "N" } ] },
+    { "id": 17, "dim": "SN", "text": "读一本书时，你更关注——", "options": [
+      { "text": "具体的情节、细节和能用的信息", "score": "S", "weight": 2 },
+      { "text": "书里那些可验证的事实和例子", "score": "S", "weight": 1 },
+      { "text": "它想传达的隐喻和象征", "score": "N", "weight": 1 },
+      { "text": "读完之后我脑子里长出的新想法", "score": "N", "weight": 2 } ] },
+    { "id": 18, "dim": "SN", "text": "讲一件事的时候，你习惯——", "options": [
+      { "text": "按顺序把发生了什么讲清楚", "score": "S", "weight": 2 },
+      { "text": "先说结论，再补细节", "score": "S", "weight": 1 },
+      { "text": "先讲它让我联想到了什么", "score": "N", "weight": 1 },
+      { "text": "说着说着就拐到别的想法上去了", "score": "N", "weight": 2 } ] },
+    { "id": 19, "dim": "SN", "text": "面对一个全新的任务，你更信赖——", "options": [
+      { "text": "被验证过的经验和现成的方法", "score": "S", "weight": 2 },
+      { "text": "先找几个参考案例照着做", "score": "S", "weight": 1 },
+      { "text": "自己的直觉和对趋势的判断", "score": "N", "weight": 1 },
+      { "text": "先想清楚底层逻辑再动手", "score": "N", "weight": 2 } ] },
+    { "id": 20, "dim": "SN", "text": "你更喜欢的学习新东西的方式是——", "options": [
+      { "text": "步骤清晰的教程和大量实例", "score": "S", "weight": 2 },
+      { "text": "跟着做一遍，基本就会了", "score": "S", "weight": 1 },
+      { "text": "先搞懂原理，再自己推演开去", "score": "N", "weight": 1 },
+      { "text": "先看全貌，和它可能通向哪里", "score": "N", "weight": 2 } ] },
+    { "id": 21, "dim": "SN", "text": "别人夸你时，你更常听到——", "options": [
+      { "text": "你做事很扎实、很靠谱", "score": "S", "weight": 2 },
+      { "text": "你执行力强，交给你放心", "score": "S", "weight": 1 },
+      { "text": "你想法挺有意思", "score": "N", "weight": 1 },
+      { "text": "你总能想到别人想不到的角度", "score": "N", "weight": 2 } ] },
+    { "id": 22, "dim": "SN", "text": "看完一部电影，你更在意——", "options": [
+      { "text": "剧情逻辑立不立得住、有没有 bug", "score": "S", "weight": 2 },
+      { "text": "演员演技和画面好不好", "score": "S", "weight": 1 },
+      { "text": "导演到底想借它表达什么", "score": "N", "weight": 1 },
+      { "text": "看完很久还在想里面那个设定", "score": "N", "weight": 2 } ] },
+    { "id": 23, "dim": "SN", "text": "你的注意力更容易落在——", "options": [
+      { "text": "眼前正在发生的、能确认的事", "score": "S", "weight": 2 },
+      { "text": "具体的安排和待办清单", "score": "S", "weight": 1 },
+      { "text": "接下来可能会发生什么", "score": "N", "weight": 1 },
+      { "text": "很久以后这件事会变成什么样", "score": "N", "weight": 2 } ] },
+    { "id": 24, "dim": "SN", "text": "对「如果……会怎样」这类假设问题——", "options": [
+      { "text": "意义不大，不如先解决现实问题", "score": "S", "weight": 2 },
+      { "text": "可以聊两句，但别太离谱", "score": "S", "weight": 1 },
+      { "text": "特别有兴趣，能顺着想很久", "score": "N", "weight": 1 },
+      { "text": "这类问题我能想到停不下来", "score": "N", "weight": 2 } ] },
+    { "id": 25, "dim": "SN", "text": "描述一个人时，你会先说——", "options": [
+      { "text": "TA 是做什么的、长什么样", "score": "S", "weight": 2 },
+      { "text": "TA 平时的一些具体习惯", "score": "S", "weight": 1 },
+      { "text": "TA 给我一种什么样的感觉", "score": "N", "weight": 1 },
+      { "text": "TA 让我想到某一类人", "score": "N", "weight": 2 } ] },
+    { "id": 26, "dim": "SN", "text": "你更擅长——", "options": [
+      { "text": "把一件事做得又快又稳", "score": "S", "weight": 2 },
+      { "text": "把复杂的事拆成可执行的步骤", "score": "S", "weight": 1 },
+      { "text": "看出两件不相关的事之间的联系", "score": "N", "weight": 1 },
+      { "text": "预判一件事接下来会怎么走", "score": "N", "weight": 2 } ] },
+    { "id": 27, "dim": "SN", "text": "买东西时，你更看重——", "options": [
+      { "text": "参数、口碑和实际体验", "score": "S", "weight": 2 },
+      { "text": "性价比高不高", "score": "S", "weight": 1 },
+      { "text": "它符不符合我想要的那种感觉", "score": "N", "weight": 1 },
+      { "text": "它以后还会不会有更多可能", "score": "N", "weight": 2 } ] },
+    { "id": 28, "dim": "SN", "text": "别人给你讲一个抽象概念时，你——", "options": [
+      { "text": "希望 TA 举个例子", "score": "S", "weight": 2 },
+      { "text": "会先问这具体用在哪", "score": "S", "weight": 1 },
+      { "text": "很容易就 get 到那个意思", "score": "N", "weight": 1 },
+      { "text": "会自己往下推，想到更多延伸", "score": "N", "weight": 2 } ] },
+    { "id": 29, "dim": "SN", "text": "你更容易记住——", "options": [
+      { "text": "具体发生过的事和人名", "score": "S", "weight": 2 },
+      { "text": "数字、日期和各种清单", "score": "S", "weight": 1 },
+      { "text": "整体的印象和氛围", "score": "N", "weight": 1 },
+      { "text": "当时的感受，和它引发的联想", "score": "N", "weight": 2 } ] },
+    { "id": 30, "dim": "SN", "text": "面对一份满是细节的表格，你——", "options": [
+      { "text": "看得很清楚，还能挑出错误", "score": "S", "weight": 2 },
+      { "text": "会按类别整理一遍", "score": "S", "weight": 1 },
+      { "text": "先看整体趋势和异常值", "score": "N", "weight": 1 },
+      { "text": "会想这些数据背后说明了什么", "score": "N", "weight": 2 } ] },
+    { "id": 31, "dim": "SN", "text": "关于「怎么判断一件事」，你更认同——", "options": [
+      { "text": "眼见为实，先看事实再下判断", "score": "S", "weight": 2 },
+      { "text": "一步一步来，比什么都稳", "score": "S", "weight": 1 },
+      { "text": "很多答案不在明面上，在联想里", "score": "N", "weight": 1 },
+      { "text": "想象力往往比经验走得更远", "score": "N", "weight": 2 } ] },
+    { "id": 32, "dim": "SN", "text": "朋友给你看一个还很粗糙的创意，你——", "options": [
+      { "text": "先指出哪些地方还不成熟", "score": "S", "weight": 2 },
+      { "text": "问 TA 打算怎么落地", "score": "S", "weight": 1 },
+      { "text": "顺着这个方向一起想下去", "score": "N", "weight": 1 },
+      { "text": "已经能看到它成熟之后的样子", "score": "N", "weight": 2 } ] },
 
-    { "id": 17, "dim": "TF", "text": "做决定时，你更看重——", "options": [
-      { "text": "逻辑是否成立、方案是否最优", "score": "T" },
-      { "text": "这个决定对相关的人有什么影响", "score": "F" } ] },
-    { "id": 18, "dim": "TF", "text": "朋友吐槽工作，你的第一反应是——", "options": [
-      { "text": "帮 TA 分析问题出在哪、怎么解决", "score": "T" },
-      { "text": "先共情，站在 TA 这边一起吐槽", "score": "F" } ] },
-    { "id": 19, "dim": "TF", "text": "别人指出你的错误时，你会——", "options": [
-      { "text": "先判断对方说得对不对", "score": "T" },
-      { "text": "先感受到被否定的不适，需要缓一下", "score": "F" } ] },
-    { "id": 20, "dim": "TF", "text": "团队出现分歧时，你更在意——", "options": [
-      { "text": "谁的方案更能真正解决问题", "score": "T" },
-      { "text": "大家的关系和气氛有没有受损", "score": "F" } ] },
-    { "id": 21, "dim": "TF", "text": "你认为更重要的品质是——", "options": [
-      { "text": "公正、讲道理、有原则", "score": "T" },
-      { "text": "善良、有同理心、体谅人", "score": "F" } ] },
-    { "id": 22, "dim": "TF", "text": "收到一件不太喜欢的礼物，你会——", "options": [
-      { "text": "礼貌道谢，心意收到就好", "score": "T" },
-      { "text": "表现得很开心，不想让对方失落", "score": "F" } ] },
-    { "id": 23, "dim": "TF", "text": "评价一个人时，你更容易——", "options": [
-      { "text": "客观地看优点和不足", "score": "T" },
-      { "text": "先看到 TA 的处境和不容易", "score": "F" } ] },
-    { "id": 24, "dim": "TF", "text": "冲突发生之后，你更想先——", "options": [
-      { "text": "把问题讲清楚，定下以后的规则", "score": "T" },
-      { "text": "修复关系，让彼此都舒服一些", "score": "F" } ] },
+    { "id": 33, "dim": "TF", "text": "做决定时，你更看重——", "options": [
+      { "text": "逻辑是否成立、方案是否最优", "score": "T", "weight": 2 },
+      { "text": "利弊算清楚，选收益最大的", "score": "T", "weight": 1 },
+      { "text": "这个决定对相关的人有什么影响", "score": "F", "weight": 1 },
+      { "text": "哪个选择让大家都更好受", "score": "F", "weight": 2 } ] },
+    { "id": 34, "dim": "TF", "text": "朋友吐槽工作，你的第一反应是——", "options": [
+      { "text": "帮 TA 分析问题出在哪、怎么解决", "score": "T", "weight": 2 },
+      { "text": "先问清具体情况，再看怎么办", "score": "T", "weight": 1 },
+      { "text": "先安慰，站在 TA 这一边", "score": "F", "weight": 1 },
+      { "text": "陪着一起吐槽，让 TA 心里舒服点", "score": "F", "weight": 2 } ] },
+    { "id": 35, "dim": "TF", "text": "别人指出你的错误时，你会——", "options": [
+      { "text": "先判断对方说得对不对", "score": "T", "weight": 2 },
+      { "text": "对的就改，不用多想", "score": "T", "weight": 1 },
+      { "text": "先感到被否定的不适，需要缓一下", "score": "F", "weight": 1 },
+      { "text": "会有点难过，即使知道对方说得对", "score": "F", "weight": 2 } ] },
+    { "id": 36, "dim": "TF", "text": "团队出现分歧时，你更在意——", "options": [
+      { "text": "谁的方案更能真正解决问题", "score": "T", "weight": 2 },
+      { "text": "哪个更符合既定的标准", "score": "T", "weight": 1 },
+      { "text": "大家的关系和气氛有没有受损", "score": "F", "weight": 1 },
+      { "text": "有没有人因此被忽略或受伤", "score": "F", "weight": 2 } ] },
+    { "id": 37, "dim": "TF", "text": "你认为更重要的品质是——", "options": [
+      { "text": "公正、讲道理、有原则", "score": "T", "weight": 2 },
+      { "text": "理性、可靠、不感情用事", "score": "T", "weight": 1 },
+      { "text": "善良、有同理心", "score": "F", "weight": 1 },
+      { "text": "体贴，能照顾到别人的感受", "score": "F", "weight": 2 } ] },
+    { "id": 38, "dim": "TF", "text": "收到一件不太喜欢的礼物，你会——", "options": [
+      { "text": "礼貌道谢，心意收到就好", "score": "T", "weight": 2 },
+      { "text": "如实说可能用不上，让 TA 下次别破费", "score": "T", "weight": 1 },
+      { "text": "表现得很开心，不想让对方失落", "score": "F", "weight": 1 },
+      { "text": "感动得不行，因为 TA 想着我", "score": "F", "weight": 2 } ] },
+    { "id": 39, "dim": "TF", "text": "评价一个人时，你更容易——", "options": [
+      { "text": "客观地看 TA 的优点和不足", "score": "T", "weight": 2 },
+      { "text": "按 TA 做成的事来判断", "score": "T", "weight": 1 },
+      { "text": "先看到 TA 的处境和不容易", "score": "F", "weight": 1 },
+      { "text": "很难客观，难免带着感情", "score": "F", "weight": 2 } ] },
+    { "id": 40, "dim": "TF", "text": "冲突发生之后，你更想先——", "options": [
+      { "text": "把问题讲清楚，定下以后的规则", "score": "T", "weight": 2 },
+      { "text": "分清责任，避免下次再犯", "score": "T", "weight": 1 },
+      { "text": "修复关系，让彼此都舒服一些", "score": "F", "weight": 1 },
+      { "text": "先确认对方没受伤，别的以后再说", "score": "F", "weight": 2 } ] },
+    { "id": 41, "dim": "TF", "text": "做小组分工时，你更倾向——", "options": [
+      { "text": "按能力和效率分配", "score": "T", "weight": 2 },
+      { "text": "谁合适谁上，简单直接", "score": "T", "weight": 1 },
+      { "text": "考虑每个人想做什么", "score": "F", "weight": 1 },
+      { "text": "尽量让大家都舒服、都参与进来", "score": "F", "weight": 2 } ] },
+    { "id": 42, "dim": "TF", "text": "看到一条让人揪心的新闻，你——", "options": [
+      { "text": "先看信息源可不可靠", "score": "T", "weight": 2 },
+      { "text": "关注事件的具体经过和原因", "score": "T", "weight": 1 },
+      { "text": "会跟着难受，替当事人不值", "score": "F", "weight": 1 },
+      { "text": "很久缓不过来，心里堵着", "score": "F", "weight": 2 } ] },
+    { "id": 43, "dim": "TF", "text": "给朋友提建议时，你——", "options": [
+      { "text": "直接说最有效的那一条", "score": "T", "weight": 2 },
+      { "text": "摆事实讲道理，能听进去就好", "score": "T", "weight": 1 },
+      { "text": "先看 TA 现在想听什么", "score": "F", "weight": 1 },
+      { "text": "会斟酌怎么说才不伤到 TA", "score": "F", "weight": 2 } ] },
+    { "id": 44, "dim": "TF", "text": "被要求做一件你不认同的事，你——", "options": [
+      { "text": "明确说明理由，然后拒绝", "score": "T", "weight": 2 },
+      { "text": "谈条件，能改就做", "score": "T", "weight": 1 },
+      { "text": "很难拒绝，怕对方为难", "score": "F", "weight": 1 },
+      { "text": "先答应下来，自己回去消化", "score": "F", "weight": 2 } ] },
+    { "id": 45, "dim": "TF", "text": "你更受不了别人——", "options": [
+      { "text": "不讲逻辑、说话没依据", "score": "T", "weight": 2 },
+      { "text": "做事没章法、效率低", "score": "T", "weight": 1 },
+      { "text": "冷漠、不顾及别人感受", "score": "F", "weight": 1 },
+      { "text": "伤害到别人却毫无察觉", "score": "F", "weight": 2 } ] },
+    { "id": 46, "dim": "TF", "text": "回看一段不愉快的关系，你——", "options": [
+      { "text": "能冷静分析问题出在哪", "score": "T", "weight": 2 },
+      { "text": "总结出几条以后要避开的坑", "score": "T", "weight": 1 },
+      { "text": "更多记得的是当时的感受", "score": "F", "weight": 1 },
+      { "text": "情绪还会回来，需要时间平复", "score": "F", "weight": 2 } ] },
+    { "id": 47, "dim": "TF", "text": "关于「怎么对待别人」，你更认同——", "options": [
+      { "text": "对事不对人，标准要一致", "score": "T", "weight": 2 },
+      { "text": "把事做好，比让人开心更重要", "score": "T", "weight": 1 },
+      { "text": "很多事没有对错，只有感受", "score": "F", "weight": 1 },
+      { "text": "比起正确，我更希望身边的人好好的", "score": "F", "weight": 2 } ] },
+    { "id": 48, "dim": "TF", "text": "朋友做了一个你不看好的决定，你——", "options": [
+      { "text": "把自己的判断说清楚", "score": "T", "weight": 2 },
+      { "text": "给出替代方案让 TA 比较", "score": "T", "weight": 1 },
+      { "text": "先支持，TA 需要的是有人站这边", "score": "F", "weight": 1 },
+      { "text": "陪着走，万一不顺至少还有人在", "score": "F", "weight": 2 } ] },
 
-    { "id": 25, "dim": "JP", "text": "你的日程安排更像——", "options": [
-      { "text": "提前规划好，按计划一项项推进", "score": "J" },
-      { "text": "保持弹性，跟着状态和心情走", "score": "P" } ] },
-    { "id": 26, "dim": "JP", "text": "面对 deadline，你通常——", "options": [
-      { "text": "提前做完，给自己留出缓冲", "score": "J" },
-      { "text": "临近截止效率最高，靠爆发力收尾", "score": "P" } ] },
-    { "id": 27, "dim": "JP", "text": "出门旅行前，你会——", "options": [
-      { "text": "做好攻略和行程表，心里才踏实", "score": "J" },
-      { "text": "定个大方向，到了再随机安排", "score": "P" } ] },
-    { "id": 28, "dim": "JP", "text": "你的房间或工位——", "options": [
-      { "text": "物品各归其位，看着整齐有序", "score": "J" },
-      { "text": "看着有点乱，但我知道东西在哪", "score": "P" } ] },
-    { "id": 29, "dim": "JP", "text": "面对还没想清楚的选择，你会——", "options": [
-      { "text": "有点焦虑，想尽快定下来", "score": "J" },
-      { "text": "不着急，说不定还有更好的选项", "score": "P" } ] },
-    { "id": 30, "dim": "JP", "text": "逛超市时，你更像——", "options": [
-      { "text": "按清单买，买完就走", "score": "J" },
-      { "text": "逛到哪算哪，看到喜欢的就拿下", "score": "P" } ] },
-    { "id": 31, "dim": "JP", "text": "做完一件事之后，你倾向——", "options": [
-      { "text": "立刻确认收尾，然后进入下一项", "score": "J" },
-      { "text": "先放松一会儿，后面的事后面说", "score": "P" } ] },
-    { "id": 32, "dim": "JP", "text": "你更喜欢的工作节奏是——", "options": [
-      { "text": "目标明确、节点清晰、按部就班", "score": "J" },
-      { "text": "自由灵活、随时可以调整方向", "score": "P" } ] }
+    { "id": 49, "dim": "JP", "text": "你的日程安排更像——", "options": [
+      { "text": "提前规划好，按计划一项项推进", "score": "J", "weight": 2 },
+      { "text": "有大致框架，细节再补", "score": "J", "weight": 1 },
+      { "text": "保持弹性，跟着状态和心情走", "score": "P", "weight": 1 },
+      { "text": "基本没有安排，当天再说", "score": "P", "weight": 2 } ] },
+    { "id": 50, "dim": "JP", "text": "面对 deadline，你通常——", "options": [
+      { "text": "提前做完，给自己留出缓冲", "score": "J", "weight": 2 },
+      { "text": "按计划推进，基本不会拖", "score": "J", "weight": 1 },
+      { "text": "临近截止效率最高，靠爆发力收尾", "score": "P", "weight": 1 },
+      { "text": "不到最后一刻，脑子不转", "score": "P", "weight": 2 } ] },
+    { "id": 51, "dim": "JP", "text": "出门旅行前，你会——", "options": [
+      { "text": "做好攻略和行程表，心里才踏实", "score": "J", "weight": 2 },
+      { "text": "订好机票住宿，其他到了再看", "score": "J", "weight": 1 },
+      { "text": "定个大方向，到了随机安排", "score": "P", "weight": 1 },
+      { "text": "说走就走，什么都不计划", "score": "P", "weight": 2 } ] },
+    { "id": 52, "dim": "JP", "text": "你的房间或工位——", "options": [
+      { "text": "物品各归其位，看着整齐有序", "score": "J", "weight": 2 },
+      { "text": "定期整理，偶尔有点乱", "score": "J", "weight": 1 },
+      { "text": "看着有点乱，但我知道东西在哪", "score": "P", "weight": 1 },
+      { "text": "乱是常态，找东西靠记忆和运气", "score": "P", "weight": 2 } ] },
+    { "id": 53, "dim": "JP", "text": "面对还没想清楚的选择，你——", "options": [
+      { "text": "有点焦虑，想尽快定下来", "score": "J", "weight": 2 },
+      { "text": "给自己设个期限，到点就定", "score": "J", "weight": 1 },
+      { "text": "不着急，说不定还有更好的选项", "score": "P", "weight": 1 },
+      { "text": "一直不定也没关系，反正可以变", "score": "P", "weight": 2 } ] },
+    { "id": 54, "dim": "JP", "text": "逛超市时，你更像——", "options": [
+      { "text": "按清单买，买完就走", "score": "J", "weight": 2 },
+      { "text": "心里有数，顺手补点别的", "score": "J", "weight": 1 },
+      { "text": "逛到哪算哪，看到喜欢的就拿下", "score": "P", "weight": 1 },
+      { "text": "经常拎回一堆原本没打算买的", "score": "P", "weight": 2 } ] },
+    { "id": 55, "dim": "JP", "text": "做完一件事之后，你倾向——", "options": [
+      { "text": "立刻确认收尾，然后进入下一项", "score": "J", "weight": 2 },
+      { "text": "检查一遍再放下", "score": "J", "weight": 1 },
+      { "text": "先放松一会儿", "score": "P", "weight": 1 },
+      { "text": "后面的事后面说", "score": "P", "weight": 2 } ] },
+    { "id": 56, "dim": "JP", "text": "你更喜欢的工作节奏是——", "options": [
+      { "text": "目标明确、节点清晰、按部就班", "score": "J", "weight": 2 },
+      { "text": "有大计划，按周推进", "score": "J", "weight": 1 },
+      { "text": "自由灵活、随时可以调整方向", "score": "P", "weight": 1 },
+      { "text": "想做什么就做什么，状态好时爆发", "score": "P", "weight": 2 } ] },
+    { "id": 57, "dim": "JP", "text": "一份任务给到你，你的第一反应是——", "options": [
+      { "text": "先拆成步骤，定好时间节点", "score": "J", "weight": 2 },
+      { "text": "先看清楚要求，再动手", "score": "J", "weight": 1 },
+      { "text": "先做一点看看，边做边调整", "score": "P", "weight": 1 },
+      { "text": "等有灵感了再开始", "score": "P", "weight": 2 } ] },
+    { "id": 58, "dim": "JP", "text": "计划被临时打乱时，你——", "options": [
+      { "text": "会有点烦躁，想尽快恢复秩序", "score": "J", "weight": 2 },
+      { "text": "先重新排一下接下来的安排", "score": "J", "weight": 1 },
+      { "text": "还好，反正本来也没完全按计划", "score": "P", "weight": 1 },
+      { "text": "挺好的，说不定有意外惊喜", "score": "P", "weight": 2 } ] },
+    { "id": 59, "dim": "JP", "text": "你的待办清单——", "options": [
+      { "text": "写得清清楚楚，完成一项就划掉", "score": "J", "weight": 2 },
+      { "text": "大概会记，重要的不会漏", "score": "J", "weight": 1 },
+      { "text": "记了也不太看", "score": "P", "weight": 1 },
+      { "text": "从没记过，都在脑子里", "score": "P", "weight": 2 } ] },
+    { "id": 60, "dim": "JP", "text": "对于规则和流程，你——", "options": [
+      { "text": "遵守它，规则让事情更高效", "score": "J", "weight": 2 },
+      { "text": "有规则就按规则来", "score": "J", "weight": 1 },
+      { "text": "看情况，不合理就绕过去", "score": "P", "weight": 1 },
+      { "text": "不太喜欢被框住", "score": "P", "weight": 2 } ] },
+    { "id": 61, "dim": "JP", "text": "周末的前一晚，你通常——", "options": [
+      { "text": "已经想好明天几点做什么", "score": "J", "weight": 2 },
+      { "text": "大致有安排，不会太空", "score": "J", "weight": 1 },
+      { "text": "看明天醒来是什么状态", "score": "P", "weight": 1 },
+      { "text": "完全没想过，睡醒了再说", "score": "P", "weight": 2 } ] },
+    { "id": 62, "dim": "JP", "text": "面对一个开放式的问题，你——", "options": [
+      { "text": "希望先明确边界和交付标准", "score": "J", "weight": 2 },
+      { "text": "会自己先划个范围", "score": "J", "weight": 1 },
+      { "text": "挺喜欢的，可以自由发挥", "score": "P", "weight": 1 },
+      { "text": "最舒服，边界越多我越难受", "score": "P", "weight": 2 } ] },
+    { "id": 63, "dim": "JP", "text": "关于「做计划这件事」，你更认同——", "options": [
+      { "text": "凡事预则立，先把计划做好", "score": "J", "weight": 2 },
+      { "text": "定了就不轻易改", "score": "J", "weight": 1 },
+      { "text": "计划赶不上变化，留点余地", "score": "P", "weight": 1 },
+      { "text": "最好的安排往往是计划之外的", "score": "P", "weight": 2 } ] },
+    { "id": 64, "dim": "JP", "text": "一件拖了很久的事，你——", "options": [
+      { "text": "早就安排上了，不会拖到很久", "score": "J", "weight": 2 },
+      { "text": "会定个时间处理掉", "score": "J", "weight": 1 },
+      { "text": "一直在心里，但也一直没动", "score": "P", "weight": 1 },
+      { "text": "拖着拖着可能就不用做了", "score": "P", "weight": 2 } ] }
   ]
 }

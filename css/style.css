@@ -114,17 +114,18 @@ body {
 .progress-bar { height: 100%; width: 0; background: #fff; border-radius: 999px; transition: width 0.35s ease; }
 .quiz-count { color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; }
 
-.quiz-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px 22px; }
+.quiz-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 18px; }
 .quiz-dim {
   display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px;
-  color: var(--accent); background: #f1edff; border-radius: 999px; padding: 4px 10px; margin-bottom: 14px;
+  color: var(--accent); background: #f1edff; border-radius: 999px; padding: 4px 10px; margin-bottom: 12px;
 }
-.quiz-text { font-size: 20px; font-weight: 700; line-height: 1.6; margin-bottom: 22px; min-height: 3.2em; }
-.quiz-options { display: flex; flex-direction: column; gap: 12px; }
+/* 每题 4 个选项，纵向空间收紧一些，保证一屏基本能看完 */
+.quiz-text { font-size: 19px; font-weight: 700; line-height: 1.55; margin-bottom: 16px; min-height: 2.6em; }
+.quiz-options { display: flex; flex-direction: column; gap: 9px; }
 
 .option {
-  border: 2px solid var(--line); background: #fafbff; border-radius: 16px;
-  padding: 16px; font-size: 15.5px; line-height: 1.55; text-align: left;
+  border: 2px solid var(--line); background: #fafbff; border-radius: 14px;
+  padding: 12px 14px; font-size: 14.5px; line-height: 1.5; text-align: left;
   color: var(--ink); cursor: pointer;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
 }

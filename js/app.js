@@ -14,7 +14,11 @@
   // 8 题一维度出现 4-4 平局时的兜底字母
   var TIE_BREAK = { EI: "I", SN: "N", TF: "F", JP: "P" };
 
-  var state = { questions: [], results: [], meta: {}, poles: {}, answers: [], index: 0 };
+  // bank = 完整题库；questions = 本次随机抽出的试卷
+  var state = {
+    bank: [], questions: [], perDim: 8,
+    results: [], meta: {}, poles: {}, answers: [], index: 0
+  };
 
   function $(id) { return document.getElementById(id); }
 
@@ -42,11 +46,13 @@
       fetchJSON("data/results.json"),
       fetchJSON("data/dimensions.json")
     ]).then(function (res) {
-      state.questions = res[0].questions;
+      state.bank = res[0].questions;
+      state.perDim = res[0].perDimension || 8;
       state.results = res[1].results;
       // groups / shareTemplate 在 results.json 里，不能整体拿 questions.json 当 meta
       state.meta = {
         title: res[0].title,
+        bankSize: state.bank.length,
         groups: res[1].groups || {},
         shareTemplate: res[1].shareTemplate
       };
@@ -59,8 +65,39 @@
     });
   }
 
+  // ---------- 随机抽题 ----------
+  function shuffle(arr) {
+    var a = (arr || []).slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  // 每个维度随机抽 perDim 题 → 打乱每题选项顺序 → 整卷题目顺序再打乱
+  function buildPaper() {
+    var per = state.perDim || 8;
+    var picked = [];
+    PAIRS.forEach(function (p) {
+      var pool = state.bank.filter(function (q) { return q.dim === p.key; });
+      if (!pool.length) return;
+      shuffle(pool).slice(0, per).forEach(function (q) {
+        picked.push({ id: q.id, dim: q.dim, text: q.text, options: shuffle(q.options) });
+      });
+    });
+    return shuffle(picked);
+  }
+
   // ---------- 答题 ----------
   function startQuiz() {
+    state.questions = buildPaper();
+    // 题库为空时不能进入答题页，否则 renderQuestion 会崩
+    if (!state.questions.length) {
+      $("startBtn").textContent = "题库为空，请检查 data/questions.json";
+      show("cover");
+      return;
+    }
     state.answers = [];
     state.index = 0;
     renderQuestion();
@@ -73,7 +110,8 @@
 
     $("quizCount").textContent = (state.index + 1) + " / " + total;
     $("progressBar").style.width = (state.index / total) * 100 + "%";
-    $("quizDim").textContent = "第 " + q.id + " 题";
+    // 每次随机组卷，题目在题库中的 id 与答题顺序无关，这里用当前序号
+    $("quizDim").textContent = "第 " + (state.index + 1) + " 题";
     $("quizText").textContent = q.text;
     $("backBtn").style.visibility = state.index === 0 ? "hidden" : "visible";
 
@@ -105,20 +143,22 @@
     }
   }
 
-  // ---------- 计分 ----------
+  // ---------- 计分（加权：强烈选项 2 分，轻微选项 1 分）----------
   function tally() {
-    var counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+    var scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
     state.questions.forEach(function (q, i) {
       var ai = state.answers[i];
       if (ai === undefined) return;
-      counts[q.options[ai].score] += 1;
+      var opt = q.options[ai];
+      if (!opt) return;
+      scores[opt.score] += (opt.weight || 1);
     });
-    return counts;
+    return scores;
   }
 
-  function summarize(counts) {
+  function summarize(scores) {
     var dims = PAIRS.map(function (p) {
-      var l = counts[p.left], r = counts[p.right], sum = l + r;
+      var l = scores[p.left], r = scores[p.right], sum = l + r;
       var lPct = sum ? Math.round((l / sum) * 100) : 50;
       var rPct = 100 - lPct;
       var winner = l === r ? null : (l > r ? p.left : p.right);
@@ -198,7 +238,7 @@
       ? "其中 " + weak.map(function (d) { return d.leftName + "/" + d.rightName; }).join("、") +
         " 两个倾向非常接近，说明你在这一维度上更灵活，会根据场景切换，不必强行归到某一极。"
       : "四个维度的倾向都比较清楚，说明你的人格偏好相对稳定。";
-    $("dimNote").textContent = "填写说明：百分比为你在该维度两极上的答案分布。" + note;
+    $("dimNote").textContent = "填写说明：百分比为你在该维度两极上的加权得分占比（选「强烈」计 2 分、「轻微」计 1 分）。" + note;
   }
 
   function renderDimExplain(s) {
@@ -226,7 +266,8 @@
     $("confLabel").textContent = "一致性：" + level;
     setTimeout(function () { $("confFill").style.width = confPct + "%"; }, 80);
     $("confNote").textContent = "计算公式：四个维度答案偏向的平均幅度（" + Math.round(s.avgMargin * 2) +
-      "% 满幅）。数值越高说明作答越明确；偏低通常意味着你正处于变化期，或本就更擅长在不同场合切换。若想更准确，建议隔一段时间重测一次对照。";
+      "% 满幅）。数值越高说明作答越明确；偏低通常意味着你正处于变化期，或本就更擅长在不同场合切换。" +
+      "本次题目从 " + (state.meta.bankSize || 64) + " 题题库中随机抽取，间隔一段时间重测几次，结果会更接近你的真实倾向。";
   }
 
   function renderProfile(s, r) {
