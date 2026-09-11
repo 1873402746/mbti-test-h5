@@ -42,14 +42,20 @@
       fetchJSON("data/results.json"),
       fetchJSON("data/dimensions.json")
     ]).then(function (res) {
-      state.meta = res[0];
       state.questions = res[0].questions;
       state.results = res[1].results;
+      // groups / shareTemplate 在 results.json 里，不能整体拿 questions.json 当 meta
+      state.meta = {
+        title: res[0].title,
+        groups: res[1].groups || {},
+        shareTemplate: res[1].shareTemplate
+      };
       res[2].poles.forEach(function (p) { state.poles[p.letter] = p; });
       $("startBtn").disabled = false;
       $("startBtn").textContent = "开始测试";
-    }).catch(function () {
+    }).catch(function (err) {
       $("startBtn").textContent = "数据加载失败，请用 HTTP 方式打开 😢";
+      if (window.console) console.error("[MBTI] 数据加载失败：", err);
     });
   }
 
@@ -142,30 +148,33 @@
       i += 1;
       if (i < MSGS.length) { $("loadingText").textContent = MSGS[i]; return; }
       clearInterval(timer);
-      renderResult();
+      // 无论渲染成功与否都必须离开 loading 页，否则用户会卡死在这里
+      try {
+        renderResult();
+      } catch (err) {
+        renderFallback(err);
+      }
       show("result");
     }, 620);
   }
 
   // ---------- 结果渲染 ----------
   function renderResult() {
-    var counts = tally();
-    var s = summarize(counts);
-    var r = state.results.find(function (x) { return x.code === s.code; })
-         || state.results.find(function (x) { return x.code === "INTJ"; });
-    var group = state.meta.groups[r.group] || { label: "", color: "#6c4dff" };
+    var s = summarize(tally());
 
-    // 头部
-    $("resultHead").style.setProperty("--head-bg",
-      "linear-gradient(160deg, " + r.gradient[0] + ", " + r.gradient[1] + ")");
-    $("resultCode").textContent = r.code;
-    $("resultName").textContent = r.emoji + " " + r.name + " · " + group.label;
-    $("resultEn").textContent = r.enName;
-    $("resultTags").innerHTML = r.tags.map(function (t) { return "<span>" + t + "</span>"; }).join("");
-    $("resultTagline").textContent = "「" + r.tagline + "」";
-    $("resultSummary").textContent = r.summary;
+    // ① 与结果库无关的部分先渲染，即使详情数据有问题也不会整页空白
+    renderDimBars(s);
+    renderDimExplain(s);
+    renderConsistency(s);
 
-    // 四维倾向条
+    // ② 结果详情
+    var r = state.results.find(function (x) { return x.code === s.code; });
+    if (!r) throw new Error("data/results.json 中缺少 " + s.code + " 类型");
+
+    renderProfile(s, r);
+  }
+
+  function renderDimBars(s) {
     var bars = $("dimBars");
     bars.innerHTML = "";
     s.dims.forEach(function (d) {
@@ -190,8 +199,9 @@
         " 两个倾向非常接近，说明你在这一维度上更灵活，会根据场景切换，不必强行归到某一极。"
       : "四个维度的倾向都比较清楚，说明你的人格偏好相对稳定。";
     $("dimNote").textContent = "填写说明：百分比为你在该维度两极上的答案分布。" + note;
+  }
 
-    // 维度解读
+  function renderDimExplain(s) {
     var ex = $("dimExplain");
     ex.innerHTML = "";
     s.dims.forEach(function (d) {
@@ -208,13 +218,39 @@
         '<p class="pole-desc">' + p.desc + '</p>';
       ex.appendChild(box);
     });
+  }
 
-    // 优势 / 盲点 / 职业
-    $("resultStrengths").innerHTML = r.strengths.map(function (t) { return "<li>" + t + "</li>"; }).join("");
-    $("resultBlindspots").innerHTML = r.blindspots.map(function (t) { return "<li>" + t + "</li>"; }).join("");
-    $("resultCareers").innerHTML = r.careers.map(function (t) { return "<span>" + t + "</span>"; }).join("");
+  function renderConsistency(s) {
+    var confPct = Math.round((s.avgMargin / 50) * 100);
+    var level = s.avgMargin >= 35 ? "很高" : s.avgMargin >= 20 ? "中等" : "偏低";
+    $("confLabel").textContent = "一致性：" + level;
+    setTimeout(function () { $("confFill").style.width = confPct + "%"; }, 80);
+    $("confNote").textContent = "计算公式：四个维度答案偏向的平均幅度（" + Math.round(s.avgMargin * 2) +
+      "% 满幅）。数值越高说明作答越明确；偏低通常意味着你正处于变化期，或本就更擅长在不同场合切换。若想更准确，建议隔一段时间重测一次对照。";
+  }
 
-    // 关系匹配
+  function renderProfile(s, r) {
+    var groups = state.meta.groups || {};
+    var group = groups[r.group] || { label: "" };
+
+    if (r.gradient && r.gradient.length === 2) {
+      $("resultHead").style.setProperty("--head-bg",
+        "linear-gradient(160deg, " + r.gradient[0] + ", " + r.gradient[1] + ")");
+    }
+    $("resultCode").textContent = r.code;
+    $("resultName").textContent = r.emoji + " " + r.name + (group.label ? " · " + group.label : "");
+    $("resultEn").textContent = r.enName || "";
+    $("resultTags").innerHTML = (r.tags || []).map(function (t) { return "<span>" + t + "</span>"; }).join("");
+    $("resultTagline").textContent = "「" + r.tagline + "」";
+    $("resultSummary").textContent = r.summary;
+
+    function list(items) {
+      return (items || []).map(function (t) { return "<li>" + t + "</li>"; }).join("");
+    }
+    $("resultStrengths").innerHTML = list(r.strengths);
+    $("resultBlindspots").innerHTML = list(r.blindspots);
+    $("resultCareers").innerHTML = (r.careers || []).map(function (t) { return "<span>" + t + "</span>"; }).join("");
+
     function label(code) {
       var x = state.results.find(function (t) { return t.code === code; });
       return x ? x.emoji + " " + x.code + "｜" + x.name : code;
@@ -222,20 +258,37 @@
     $("matchBest").textContent = label(r.bestMatch);
     $("matchGrowth").textContent = label(r.growthMatch);
 
-    // 一致性
-    var confPct = Math.round((s.avgMargin / 50) * 100);
-    var level = s.avgMargin >= 35 ? "很高" : s.avgMargin >= 20 ? "中等" : "偏低";
-    $("confLabel").textContent = "一致性：" + level;
-    setTimeout(function () { $("confFill").style.width = confPct + "%"; }, 80);
-    $("confNote").textContent = "计算公式：四个维度答案偏向的平均幅度（" + Math.round(s.avgMargin * 2) +
-      "% 满幅）。数值越高说明作答越明确；偏低通常意味着你正处于变化期，或本就更擅长在不同场合切换。若想更准确，建议隔一段时间重测一次对照。";
-
-    // 分享文案
     var tpl = state.meta.shareTemplate || "我的 MBTI 是 {code}｜{name}";
     window.__shareText = tpl
       .replace("{code}", r.code).replace("{name}", r.name)
       .replace("{tagline}", r.tagline)
       + (SITE_URL ? "\n" + SITE_URL : "");
+  }
+
+  // 结果详情渲染失败时的兜底：保留能算出来的四维分析，明确说明问题
+  function renderFallback(err) {
+    if (window.console) console.error("[MBTI] 结果渲染失败：", err);
+    var s = summarize(tally());
+    try {
+      renderDimBars(s);
+      renderDimExplain(s);
+      renderConsistency(s);
+    } catch (e) { /* 兜底里再出错就只能放弃了 */ }
+
+    $("resultCode").textContent = s.code;
+    $("resultName").textContent = "结果详情暂时无法显示";
+    $("resultEn").textContent = "";
+    $("resultTags").innerHTML = "<span>可截图反馈</span>";
+    $("resultTagline").textContent = "";
+    $("resultSummary").textContent = "你的四维倾向已经算出，上方图表可正常参考；但人格详情渲染失败：" +
+      (err && err.message ? err.message : String(err)) +
+      "。请检查 data/results.json 与 data/dimensions.json 是否完整。";
+    $("resultStrengths").innerHTML = "";
+    $("resultBlindspots").innerHTML = "";
+    $("resultCareers").innerHTML = "";
+    $("matchBest").textContent = "—";
+    $("matchGrowth").textContent = "—";
+    window.__shareText = "我的 MBTI 倾向：" + s.code;
   }
 
   // ---------- 事件 ----------
@@ -265,6 +318,13 @@
       done();
     }
   });
+
+  // 全局错误可见化：出问题时在控制台留痕，方便排查
+  if (window.addEventListener) {
+    window.addEventListener("error", function (e) {
+      if (window.console) console.error("[MBTI] 运行时错误：", e && (e.message || e));
+    });
+  }
 
   loadData();
 })();

@@ -34,6 +34,26 @@ npx serve mbti-test-h5
 python -m http.server 8080 --directory mbti-test-h5
 ```
 
+## 冒烟测试
+
+`test/smoke-test.js` 用最小 DOM 桩在 Node 里跑完整流程（封面 → 32 题 → 结果页），
+无需浏览器、无需安装任何依赖：
+
+```bash
+node test/smoke-test.js                        # 正常路径，校验结果页各区块
+SMOKE_FAULT=groups       node test/smoke-test.js   # results.json 缺 groups（应降级且不报错）
+SMOKE_FAULT=missing-type node test/smoke-test.js   # 结果库缺类型（应进入兜底页，不卡 loading）
+SMOKE_FAULT=nodata       node test/smoke-test.js   # 数据加载失败（应提示改用 HTTP 打开）
+```
+
+> 改动 `js/app.js` 或 `data/*.json` 后建议先跑一遍，避免再次出现「结果页渲染异常导致一直卡在分析中」。
+
+## 容错设计（为什么要跑上面的测试）
+
+- 分析动画结束后，`renderResult()` 被 `try/catch` 包裹，**无论成功失败都会离开加载页**。
+- 四维倾向图、维度解读、一致性分析**不依赖结果库**，先渲染；结果详情单独渲染，出问题只影响详情区块。
+- 结果库缺少对应类型时，进入兜底页并保留已算出的四维分析，同时提示检查数据文件。
+
 ## 发布到 GitHub Pages
 
 ```bash
