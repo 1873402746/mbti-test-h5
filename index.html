@@ -10,8 +10,26 @@
 <body data-page-node-id="Qs7EZXKjiTSRMOv2St4LDS">
   <div class="stage" data-page-node-id="zT1sSq8u1d2S7rz6dyYLXT">
 
+    <!-- 前置验证码 -->
+    <section id="screen-gate" class="screen active">
+      <div class="gate-box">
+        <div class="gate-lock" aria-hidden="true">🔒</div>
+        <h2 class="gate-title">请输入访问验证码</h2>
+        <p class="gate-sub">4 位数字 · 验证通过后开始测试</p>
+        <div class="gate-inputs" id="gateInputs">
+          <input id="gateInput0" class="gate-input" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="验证码第 1 位">
+          <input id="gateInput1" class="gate-input" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="验证码第 2 位">
+          <input id="gateInput2" class="gate-input" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="验证码第 3 位">
+          <input id="gateInput3" class="gate-input" type="text" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="验证码第 4 位">
+        </div>
+        <p id="gateError" class="gate-error" role="alert"></p>
+        <button id="gateBtn" class="btn-primary" type="button">进入测试</button>
+        <p class="gate-hint">验证码为 4 位数字，请在获取测试入口时留意。</p>
+      </div>
+    </section>
+
     <!-- 封面 -->
-    <section id="screen-cover" class="screen active" data-page-node-id="v6sEyPFEcDMtqh5IzXSsV2">
+    <section id="screen-cover" class="screen" data-page-node-id="v6sEyPFEcDMtqh5IzXSsV2">
       <div class="cover-grid" aria-hidden="true" data-page-node-id="18fjyGUBmYZYQDGiJne3QF">
         <span data-page-node-id="nacjP5HwhuZHQHcq57cxkN">INTJ</span><span data-page-node-id="KuQUqu4TA5xngYLLEgAB2z">ENFP</span><span data-page-node-id="vDS6sA0ZsgtNzymnGWqiHv">ISTJ</span><span data-page-node-id="ibax5k0dpPDBf5UfVSCKEW">ESFJ</span>
         <span data-page-node-id="hO3sl6ci2h9DkHo9xX84d9">INFP</span><span data-page-node-id="EsCbGbkQFk2gADViNTIPxs">ENTP</span><span data-page-node-id="tXEP3RCqtt3tB4fQ20EPIM">ISFJ</span><span data-page-node-id="bz4Vs28qRmYa6KLCWpc4W3">ESTP</span>

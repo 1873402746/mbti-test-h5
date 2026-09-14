@@ -44,6 +44,39 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ============ 前置验证码 ============ */
+#screen-gate { justify-content: center; text-align: center; }
+
+.gate-box { width: 100%; }
+.gate-lock { font-size: 44px; line-height: 1; margin-bottom: 18px; animation: popIn 0.5s ease both; }
+.gate-title { font-size: 24px; font-weight: 800; color: #fff; letter-spacing: 0.5px; }
+.gate-sub { margin: 10px 0 26px; color: rgba(255, 255, 255, 0.85); font-size: 13.5px; }
+
+/* 4 格输入：窄屏自动收缩，不产生横向溢出 */
+.gate-inputs { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
+.gate-input {
+  flex: 1 1 0; min-width: 0; max-width: 58px; height: 66px;
+  text-align: center; font-size: 26px; font-weight: 800; color: var(--ink);
+  background: #fff; border: 2px solid transparent; border-radius: 16px;
+  box-shadow: var(--shadow); outline: none; caret-color: var(--accent);
+  font-family: inherit; padding: 0;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.gate-input:focus { border-color: var(--accent); transform: translateY(-2px); }
+.gate-input.filled { border-color: var(--accent); }
+
+.gate-inputs.shake { animation: gateShake 0.4s ease; }
+@keyframes gateShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-9px); }
+  40% { transform: translateX(9px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.gate-error { min-height: 20px; margin-bottom: 12px; color: #ffd2d2; font-size: 12.5px; font-weight: 600; }
+.gate-hint { margin-top: 16px; color: rgba(255, 255, 255, 0.68); font-size: 11.5px; line-height: 1.7; }
+
 /* ============ 封面 ============ */
 #screen-cover { justify-content: center; text-align: center; }
 

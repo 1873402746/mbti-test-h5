@@ -2,6 +2,7 @@
  * 冒烟测试 v2 —— 对应「64 题库 / 每次随机抽 32 题 / 每题 4 选项 / 加权计分」的新版本。
  *
  * 覆盖点：
+ *   0. 前置验证码：初始停在 gate、错误码被拒、位数不足被拒、正确码 1783 放行、整串粘贴清洗
  *   1. 随机组卷：每次 32 题、四维各 8 题、卷内不重复、选项内容完整
  *   2. 加权计分：按「强左 / 弱左 / 弱右 / 弱右」模式作答，每维度累计 左 6 : 右 4（60%）。
  *      若计分退化成简单计数，结果会变成 4:4 平局（兜底 INFP）而不是 ESTJ —— 以此锁住加权逻辑
@@ -40,6 +41,16 @@ BANK.questions.forEach(function (q) {
 /* ---------- 最小 DOM 桩 ---------- */
 const elCache = {};
 const created = [];
+
+// 先从 index.html 收集全部 id：桩只认得真实存在的 id，
+// 这样 app.js 一旦引用了 HTML 里没有的元素就会立刻暴露，而不是被静默造出一个假元素
+const HTML_TEXT = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+const DOM_IDS = new Set();
+(function collectIds() {
+  const re = /\bid="([^"]+)"/g;
+  let m;
+  while ((m = re.exec(HTML_TEXT)) !== null) DOM_IDS.add(m[1]);
+})();
 
 function makeStyle() {
   const s = {};
@@ -87,6 +98,7 @@ function El(tag) {
 
 const document_ = {
   getElementById: function (id) {
+    if (!DOM_IDS.has(id)) return null;
     if (!elCache[id]) elCache[id] = El("div");
     return elCache[id];
   },
@@ -121,6 +133,20 @@ function fetchStub(url) {
     return Promise.resolve({ ok: false, status: 404, json: function () { return Promise.resolve(null); } });
   }
 }
+
+/* ---------- 从 index.html 读取初始 active 屏，保证桩与真实页面一致 ---------- */
+(function seedActiveScreens() {
+  const html = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
+  const tags = html.match(/<section\b[^>]*>/g) || [];
+  tags.forEach(function (tag) {
+    const idM = tag.match(/\bid="([^"]+)"/);
+    const clsM = tag.match(/\bclass="([^"]*)"/);
+    if (!idM || !clsM) return;
+    if (clsM[1].split(/\s+/).indexOf("active") > -1) {
+      document_.getElementById(idM[1])._cls.add("active");
+    }
+  });
+})();
 
 /* ---------- 执行 app.js ---------- */
 const ctx = vm.createContext({
@@ -215,6 +241,56 @@ async function answerOne(checkOptions) {
   console.log("冒烟测试开始" + (FAULT ? "（故障注入：" + FAULT + "）" : "") + "\n");
 
   await sleep(60);
+
+  console.log("[0] 前置验证码");
+  const gateEl = document_.getElementById("screen-gate");
+  const coverEl = document_.getElementById("screen-cover");
+  const gateActive = () => gateEl._cls.has("active");
+  const coverActive = () => coverEl._cls.has("active");
+  const gateError = () => document_.getElementById("gateError").textContent;
+
+  if (gateActive() && !coverActive()) ok("初始停留在验证码页，未直通封面");
+  else bad("初始页面状态异常：gate=" + gateActive() + " cover=" + coverActive());
+
+  function typeCode(code) {
+    for (let i = 0; i < code.length; i++) {
+      const el = document_.getElementById("gateInput" + i);
+      el.value = code[i];
+      el._handlers.input();
+    }
+  }
+
+  // 错误验证码：必须被拒绝
+  typeCode("9999");
+  await sleep(320);
+  if (!coverActive()) ok("错误验证码未放行");
+  else bad("错误验证码竟直接放行");
+  if (gateError().indexOf("不正确") > -1) ok("错误提示可见：" + gateError());
+  else bad("错误提示缺失：" + JSON.stringify(gateError()));
+
+  // 位数不足点按钮：也不能过
+  document_.getElementById("gateInput0").value = "1";
+  document_.getElementById("gateBtn")._handlers.click();
+  if (!coverActive() && gateError().indexOf("完整") > -1) ok("位数不足时提示：" + gateError());
+  else bad("位数不足处理异常：" + JSON.stringify(gateError()));
+  document_.getElementById("gateInput0").value = "";
+
+  // 正确验证码：放行进封面
+  typeCode("1783");
+  await sleep(320);
+  if (coverActive()) ok("正确验证码 1783 放行，进入封面页");
+  else bad("正确验证码未放行：" + JSON.stringify(gateError()));
+
+  // 整串粘贴 + 非数字清洗
+  document_.getElementById("gateInput0")._handlers.paste({
+    clipboardData: { getData: function () { return "17-83"; } },
+    preventDefault: function () {}
+  });
+  await sleep(320);
+  if (coverActive()) ok("粘贴「17-83」清洗为 1783 后可通过");
+  else bad("粘贴处理异常：" + JSON.stringify(gateError()));
+  console.log("");
+
   const startBtn = document_.getElementById("startBtn");
 
   if (FAULT === "nodata") {

@@ -23,13 +23,133 @@
   function $(id) { return document.getElementById(id); }
 
   var screens = {
-    cover: $("screen-cover"), quiz: $("screen-quiz"),
+    gate: $("screen-gate"), cover: $("screen-cover"), quiz: $("screen-quiz"),
     loading: $("screen-loading"), result: $("screen-result")
   };
 
   function show(name) {
     Object.keys(screens).forEach(function (k) { screens[k].classList.toggle("active", k === name); });
     window.scrollTo(0, 0);
+  }
+
+  // ---------- 前置验证码 ----------
+  // 固定验证码：改这一行即可（长度自适应）
+  var GATE_CODE = "1783";
+  // 同一标签页会话内刷新是否免重复输入：true = 记住已通过
+  var GATE_REMEMBER = false;
+  var GATE_KEY = "mbti-gate-passed";
+  var GATE_LEN = GATE_CODE.length;
+
+  function gateRemembered() {
+    if (!GATE_REMEMBER) return false;
+    try { return sessionStorage.getItem(GATE_KEY) === "1"; } catch (e) { return false; }
+  }
+
+  function gateRemember() {
+    if (!GATE_REMEMBER) return;
+    try { sessionStorage.setItem(GATE_KEY, "1"); } catch (e) { /* 隐私模式下忽略 */ }
+  }
+
+  function initGate() {
+    var inputs = [];
+    for (var i = 0; i < GATE_LEN; i++) {
+      var one = $("gateInput" + i);
+      if (!one) break;                     // 以页面实际存在的输入框为准
+      inputs.push(one);
+    }
+    var box = $("gateInputs"), errEl = $("gateError"), btn = $("gateBtn");
+    if (!inputs.length || !box || !errEl || !btn) return;
+    // 位数与输入框不一致时必须显式暴露，否则用户会永远卡在「验证码不正确」
+    if (inputs.length !== GATE_LEN) {
+      errEl.textContent = "验证码配置有误：index.html 需要 " + GATE_LEN + " 个输入框";
+      if (window.console) console.error("[MBTI] GATE_CODE 为 " + GATE_LEN + " 位，页面输入框仅 " + inputs.length + " 个");
+      return;
+    }
+    var LEN = inputs.length;
+
+    function digits(v) { return String(v == null ? "" : v).replace(/\D/g, ""); }
+    function value() {
+      return inputs.map(function (el) { return digits(el.value).slice(0, 1); }).join("");
+    }
+    function setError(msg) { errEl.textContent = msg || ""; }
+    function focusAt(idx) { if (inputs[idx] && inputs[idx].focus) inputs[idx].focus(); }
+    function clearAll() {
+      inputs.forEach(function (el) { el.value = ""; el.classList.remove("filled"); });
+      focusAt(0);
+    }
+    function shake() {
+      box.classList.remove("shake");
+      void box.offsetWidth;                // 强制重排，让动画可以连续重放
+      box.classList.add("shake");
+    }
+    function submit() {
+      var v = value();
+      if (v.length < LEN) { setError("请输入完整的 " + LEN + " 位验证码"); shake(); return; }
+      if (v === GATE_CODE) {
+        setError("");
+        gateRemember();
+        show("cover");
+        return;
+      }
+      setError("验证码不正确，请重新输入");
+      shake();
+      clearAll();
+    }
+    // 粘贴 / 输入整串：从 from 位置起逐格填充
+    function fill(text, from) {
+      var chars = digits(text).slice(0, LEN).split("");
+      if (!chars.length) return;
+      chars.forEach(function (c, k) {
+        var el = inputs[from + k];
+        if (!el) return;
+        el.value = c;
+        el.classList.add("filled");
+      });
+      focusAt(Math.min(from + chars.length, LEN - 1));
+      setError("");
+      if (value().length === LEN) setTimeout(submit, 180);
+    }
+
+    inputs.forEach(function (el, idx) {
+      el.addEventListener("input", function () {
+        el.value = digits(el.value).slice(0, 1);
+        el.classList.toggle("filled", !!el.value);
+        setError("");
+        if (el.value && idx < LEN - 1) focusAt(idx + 1);
+        if (value().length === LEN) setTimeout(submit, 180);
+      });
+
+      el.addEventListener("keydown", function (e) {
+        var key = e.key;
+        if (key === "Backspace" && !el.value && idx > 0) {
+          if (e.preventDefault) e.preventDefault();
+          inputs[idx - 1].value = "";
+          inputs[idx - 1].classList.remove("filled");
+          focusAt(idx - 1);
+        } else if (key === "Enter") {
+          submit();
+        } else if (key === "ArrowLeft" && idx > 0) {
+          focusAt(idx - 1);
+        } else if (key === "ArrowRight" && idx < LEN - 1) {
+          focusAt(idx + 1);
+        }
+      });
+
+      // 支持整串粘贴（含空格、连字符等非数字字符会被清洗）
+      el.addEventListener("paste", function (e) {
+        var data = e.clipboardData || (typeof window !== "undefined" && window.clipboardData);
+        if (!data || !data.getData) return;
+        var txt = digits(data.getData("text"));
+        if (!txt) return;
+        if (e.preventDefault) e.preventDefault();
+        fill(txt, idx);
+      });
+
+      el.addEventListener("focus", function () { if (el.select) el.select(); });
+    });
+
+    btn.addEventListener("click", submit);
+    focusAt(0);
   }
 
   // ---------- 数据 ----------
@@ -367,5 +487,8 @@
     });
   }
 
+  initGate();
+  // 开启 GATE_REMEMBER 时，刷新可跳过验证码
+  if (gateRemembered()) show("cover");
   loadData();
 })();
