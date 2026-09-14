@@ -11,7 +11,7 @@
 
 | 事实 | 说明 |
 |---|---|
-| 本机**直连** `github.com:443` 超时 | 必须走本地代理 `http://127.0.0.1:7890`（Clash 系代理工具，需保持运行） |
+| 本机直连 `github.com:443` **时通时不通** | 通的时候直连就能推（2026-09-14 实测 2 秒直推成功）；不通时报 `Timed out`，此时需走本地代理 `http://127.0.0.1:7890` |
 | 系统级凭据助手是 TortoiseGit 的 `helper-selector` | 它在命令行/脚本场景会弹选择框，导致**无限卡住**（不报错、不退出） |
 
 另外，Windows 凭据管理器里**已经存有** `git:https://github.com` 凭据（由 TortoiseGit 保存），用 git 自带的 `wincred` 助手可以直接读取，无需重新登录。
@@ -25,6 +25,29 @@ credential.helper = wincred
 ```
 
 配好之后，在这个仓库里 `git push` / `git pull` 以及小乌龟推送都会**自动走代理 + 复用已存凭据**。
+
+### ⚠️ 代理工具没开时会直接失败（2026-09-14 实测）
+
+仓库级代理是**硬配置**：代理工具没开时，git 连 `127.0.0.1:7890` 都连不上，报
+
+```
+fatal: unable to access '...': Failed to connect to github.com:443 over proxy 127.0.0.1
+after 2073 ms: Could not connect to server
+```
+
+这**不是 GitHub 的问题**，是本机代理端口没人监听。先确认：
+
+```bash
+netstat -ano | grep ":7890" | grep -i listening
+```
+
+- **有输出** → 代理开着，直接 `git push origin main`
+- **没输出** → 二选一：① 打开代理工具再推（推荐，配置不用改）；② 临时绕过代理走直连（本机直连有时完全可用）：
+
+```bash
+cd "D:/workBuddyWorking/2026-09-11-08-49-19/mbti-test-h5"
+git -c http.proxy= -c https.proxy= push origin main
+```
 
 查看当前配置：
 ```bash
